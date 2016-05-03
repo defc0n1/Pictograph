@@ -497,7 +497,7 @@ class PictographMainViewController: PictographViewController, UINavigationContro
         //Setting the color of the keyboard
         self.mainEncodeView.encryptionKeyField.keyboardAppearance = nightMode ? .Dark : .Default
         
-        for button in [self.mainEncodeView.encodeButton, self.mainEncodeView.decodeButton] {
+        for button in [self.mainEncodeView.encodeButton, self.mainEncodeView.decodeButton, self.mainEncodeView.encodeImageButton, self.mainEncodeView.decodeImageButton] {
             
             //Button background
             button.backgroundColor = nightMode ? mainAppColorNight : UIColor.whiteColor()
