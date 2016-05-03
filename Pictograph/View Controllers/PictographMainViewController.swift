@@ -32,7 +32,7 @@ class PictographMainViewController: PictographViewController, UINavigationContro
         self.navigationItem.title = "Pictograph"
         self.navigationItem.titleView = self.createNavigationTitle("Pictograph")
         
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Settings", style: .Plain, target: self, action: "openSettings")
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Settings", style: .Plain, target: self, action: #selector(self.openSettings))
         
         //Adding all the UI elements to the screen
         self.mainEncodeView.translatesAutoresizingMaskIntoConstraints = false
@@ -45,12 +45,12 @@ class PictographMainViewController: PictographViewController, UINavigationContro
         self.view.addConstraint(NSLayoutConstraint(item: self.mainEncodeView, attribute: .Bottom, relatedBy: .Equal, toItem: self.view, attribute: .Bottom, multiplier: 1, constant: 0))
         
         //Setting up the actions for the elements
-        self.mainEncodeView.encodeButton.addTarget(self, action: Selector("startEncodeProcess"), forControlEvents: .TouchUpInside)
-        self.mainEncodeView.decodeButton.addTarget(self, action: Selector("startDecodeProcess"), forControlEvents: .TouchUpInside)
-        self.mainEncodeView.encodeImageButton.addTarget(self, action: Selector("startEncodeImageProcess"), forControlEvents: .TouchUpInside)
-        self.mainEncodeView.decodeImageButton.addTarget(self, action: Selector("startDecodeImageProcess"), forControlEvents: .TouchUpInside)
+        self.mainEncodeView.encodeButton.addTarget(self, action: #selector(self.startEncodeProcess), forControlEvents: .TouchUpInside)
+        self.mainEncodeView.decodeButton.addTarget(self, action: #selector(self.startDecodeProcess), forControlEvents: .TouchUpInside)
+        self.mainEncodeView.encodeImageButton.addTarget(self, action: #selector(self.startEncodeImageProcess), forControlEvents: .TouchUpInside)
+        self.mainEncodeView.decodeImageButton.addTarget(self, action: #selector(self.startDecodeImageProcess), forControlEvents: .TouchUpInside)
         self.mainEncodeView.encryptionKeyField.delegate = self
-        self.mainEncodeView.encryptionSwitch.addTarget(self, action: Selector("switchToggled:"), forControlEvents: .ValueChanged)
+        self.mainEncodeView.encryptionSwitch.addTarget(self, action: #selector(self.switchToggled(_:)), forControlEvents: .ValueChanged)
         
         
         if (setUpAndShowIntroViews()) {
@@ -60,8 +60,8 @@ class PictographMainViewController: PictographViewController, UINavigationContro
         }
         
         //Setting up the notifications for the settings
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("showPasswordOnScreenChanged"), name: pictographShowPasswordOnScreenSettingChangedNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "changeNightModeAnimated", name: pictographNightModeSettingChangedNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.showPasswordOnScreenChanged), name: pictographShowPasswordOnScreenSettingChangedNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.changeNightModeAnimated), name: pictographNightModeSettingChangedNotification, object: nil)
     }
     
     override func viewWillAppear(animated: Bool) {
