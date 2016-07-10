@@ -521,7 +521,7 @@
     float scale = roundf(totalScale * 100.0)/100.0; //Rounding to 2 digits
     CGSize newSize = CGSizeMake(image.size.width / scale, image.size.height / scale);
     
-    UIImage *resizedImage = [self imageWithImage:imageToHide scaledToSize:newSize];
+    UIImage *resizedImage = [self imageWithImage:imageToHide withScaleFactor:scale];
     
     NSData *resizedImageData = UIImagePNGRepresentation(resizedImage);
     
@@ -552,16 +552,17 @@
     return [self saveImageToGraphicsContextAndEncodeBitsInImage:image numberOfBitsNeeded:numberOfBitsNeeded arrayOfBits:arrayOfBits];
 }
 
-//http://stackoverflow.com/questions/2658738/the-simplest-way-to-resize-an-uiimage
-- (UIImage *)imageWithImage:(UIImage *)image scaledToSize:(CGSize)newSize {
-    //UIGraphicsBeginImageContext(newSize);
-    // In next line, pass 0.0 to use the current device's pixel scaling factor (and thus account for Retina resolution).
-    // Pass 1.0 to force exact pixel size.
-    UIGraphicsBeginImageContextWithOptions(newSize, NO, 0.0);
-    [image drawInRect:CGRectMake(0, 0, newSize.width, newSize.height)];
-    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    return newImage;
+/**
+ *  Scales an image with a scale factor
+ *
+ *  @param image image to scale
+ *  @param scale factor by which to scale
+ *
+ *  @return scaled image
+ */
+- (UIImage *)imageWithImage:(UIImage *)image withScaleFactor:(CGFloat)scale {
+    UIImage *scaledImage = [[UIImage alloc] initWithData:UIImagePNGRepresentation(image) scale:scale];
+    return scaledImage;
 }
 
 @end
