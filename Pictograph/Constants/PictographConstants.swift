@@ -8,5 +8,9 @@
 
 import Foundation
 
-let pictographShowPasswordOnScreenSettingChangedNotification = "pictographShowPasswordOnScreenSettingChangedNotification"
-let pictographNightModeSettingChangedNotification = "pictographNightModeSettingChangedNotification"
+struct Constants {
+    struct Notifications {
+        static let showPasswordSettingsChangedNotification = "pictographShowPasswordOnScreenSettingChangedNotification"
+        static let nightModeSettingsChangedNotification = "pictographNightModeSettingChangedNotification"
+    }
+}

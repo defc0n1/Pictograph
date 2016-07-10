@@ -53,7 +53,7 @@ class PictographDataController: NSObject {
     }
     
     func getUserEncryptionEnabled() -> Bool {
-        return user.encryptionEnabled;
+        return user.encryptionEnabled
     }
     
     func setUserEncryptionEnabled(enabledOrNot: Bool) {
@@ -110,7 +110,7 @@ class PictographDataController: NSObject {
     //MARK: - analytics methods
     
     //Record a message encrypted event
-    func analyticsEncodeSend(encrypted:Bool) {
+    func analyticsEncodeSend(encrypted: Bool) {
         let encryptedOrNot = encrypted ? "Encrypted" : "Unencrypted"
     
         Answers.logCustomEventWithName("Encode Message", customAttributes: ["Encryption" : encryptedOrNot])

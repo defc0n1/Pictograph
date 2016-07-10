@@ -53,15 +53,15 @@ class PictographMainViewController: PictographViewController, UINavigationContro
         self.mainEncodeView.encryptionSwitch.addTarget(self, action: #selector(self.switchToggled(_:)), forControlEvents: .ValueChanged)
         
         
-        if (setUpAndShowIntroViews()) {
+        if self.setUpAndShowIntroViews() {
             //If intro views are shown, hide UI elements
             self.mainEncodeView.alpha = 0
             self.navigationController?.setNavigationBarHidden(true, animated: false)
         }
         
         //Setting up the notifications for the settings
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.showPasswordOnScreenChanged), name: pictographShowPasswordOnScreenSettingChangedNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.changeNightModeAnimated), name: pictographNightModeSettingChangedNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.showPasswordOnScreenChanged), name: Constants.Notifications.showPasswordSettingsChangedNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.changeNightModeAnimated), name: Constants.Notifications.nightModeSettingsChangedNotification, object: nil)
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -78,8 +78,8 @@ class PictographMainViewController: PictographViewController, UINavigationContro
         super.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator)
         
         //Adjusting the content size of the scroll view when the device rotates
-        self.mainEncodeView.elementContainer.frame = CGRectMake(0, 0, size.width, max(size.height-44, 320))
-        self.mainEncodeView.contentSize = CGSizeMake(size.width, max(size.height-64, 320))
+        self.mainEncodeView.elementContainer.frame = CGRect(x: 0, y: 0, width: size.width, height: max(size.height - 44, 320))
+        self.mainEncodeView.contentSize = CGSize(width: size.width, height: max(size.height - 64, 320))
     }
     
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
@@ -138,7 +138,7 @@ class PictographMainViewController: PictographViewController, UINavigationContro
         
         if introViewArray.count > 0 {
             //If there are intro views to show
-            let frameRect = CGRectMake(self.view.frame.origin.x, self.view.frame.origin.y, self.view.frame.size.width, self.view.frame.size.height + 10) //Status bar
+            let frameRect = CGRect(x: self.view.frame.origin.x, y: self.view.frame.origin.y, width: self.view.frame.size.width, height: self.view.frame.size.height + 10) //Status bar
             let introView = EAIntroView(frame: frameRect)
             introView.pages = introViewArray
             introView.delegate = self
@@ -174,13 +174,13 @@ class PictographMainViewController: PictographViewController, UINavigationContro
         /* True if encrytption is enabled AND the key isn't blank
         OR encrytion is disabled
         */
-        if ((PictographDataController.sharedController.getUserEncryptionKeyString() != "" && PictographDataController.sharedController.getUserEncryptionEnabled()) || !PictographDataController.sharedController.getUserEncryptionEnabled()) {
+        if (PictographDataController.sharedController.getUserEncryptionKeyString() != "" && PictographDataController.sharedController.getUserEncryptionEnabled()) || !PictographDataController.sharedController.getUserEncryptionEnabled() {
             
             let getMessageController = self.buildGetMessageController("Enter your message", message: nil, isSecure: false, withPlaceHolder: "Your message here")
             var userImage: UIImage!
             
             //Getting the photo the user wants to use
-            getPhotoForEncodingOrDecoding(true).then { image in
+            self.getPhotoForEncodingOrDecoding(true).then { image in
                 
                 //Saving the image first
                 userImage = image
@@ -205,7 +205,7 @@ class PictographMainViewController: PictographViewController, UINavigationContro
     
     //Starting the decoding process
     func startDecodeProcess() {
-        if ((PictographDataController.sharedController.getUserEncryptionKeyString() != "" && PictographDataController.sharedController.getUserEncryptionEnabled()) || !PictographDataController.sharedController.getUserEncryptionEnabled()) {
+        if (PictographDataController.sharedController.getUserEncryptionKeyString() != "" && PictographDataController.sharedController.getUserEncryptionEnabled()) || !PictographDataController.sharedController.getUserEncryptionEnabled() {
             
             //If the user has encryption enabled and the password isn't blank or encryption is not enabled
             getPhotoForEncodingOrDecoding(false).then { image in
@@ -257,7 +257,7 @@ class PictographMainViewController: PictographViewController, UINavigationContro
             //Device has camera & library, show option to choose
            
             //If the device is an iPad, popup in the middle of screen
-            let alertStyle:UIAlertControllerStyle = (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiom.Pad) ? .Alert : .ActionSheet
+            let alertStyle: UIAlertControllerStyle = (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiom.Pad) ? .Alert : .ActionSheet
             
             //Building the picker to choose the type of input
             let imagePopup = PMKAlertController(title: "Select Picture", message: nil, preferredStyle: alertStyle)
@@ -388,8 +388,17 @@ class PictographMainViewController: PictographViewController, UINavigationContro
         }
     }
     
-    //Building the alert that gets the message that the user wants to encode
-    func buildGetMessageController(title: String, message: String?, isSecure: Bool, withPlaceHolder placeHolder:String) -> PMKAlertController {
+    /**
+     Builds the get message alert controller
+     
+     - parameter title:       title of the controller
+     - parameter message:     message underneath the controller
+     - parameter isSecure:    password or no password
+     - parameter placeholder: placeholder in the text field
+     
+     - returns: alert controller that works with PromiseKit
+     */
+    func buildGetMessageController(title: String, message: String?, isSecure: Bool, withPlaceHolder placeholder: String) -> PMKAlertController {
         
         let getMessageController = PMKAlertController(title: title, message: message, preferredStyle: .Alert)
         let confirmAction = getMessageController.addActionWithTitle("Confirm") //Saving the confirmAction so it can be enabled/disabled
@@ -397,7 +406,7 @@ class PictographMainViewController: PictographViewController, UINavigationContro
         
         //Building the text field with the correct settings
         getMessageController.addTextFieldWithConfigurationHandler({(textField: UITextField) -> Void in
-            textField.placeholder = placeHolder
+            textField.placeholder = placeholder
             textField.secureTextEntry = isSecure
             confirmAction.enabled = false
             
@@ -414,6 +423,8 @@ class PictographMainViewController: PictographViewController, UINavigationContro
     
     /**
      Sets the state of the decode and encode image buttons to be enabled or disabled based on encryption being enabled or disabled
+     
+     - parameter enable: whether or not to enable or disable
      */
     func enableOrDisableImageButtons(enable: Bool) {
         for button in [self.mainEncodeView.encodeImageButton, self.mainEncodeView.decodeImageButton] {
@@ -429,9 +440,9 @@ class PictographMainViewController: PictographViewController, UINavigationContro
         if  UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiom.Pad {
             //On an iPad, show the popover from the button
             activityController.modalPresentationStyle = .Popover
-            activityController.popoverPresentationController!.sourceView = mainEncodeView.encodeButton
+            activityController.popoverPresentationController!.sourceView = self.mainEncodeView.encodeButton
             //Presenting it from the middle of the encode button
-            activityController.popoverPresentationController!.sourceRect = CGRectMake(mainEncodeView.encodeButton.frame.width / 2, mainEncodeView.encodeButton.frame.height / 2, 0, 0)
+            activityController.popoverPresentationController!.sourceRect = CGRect(x: self.mainEncodeView.encodeButton.frame.width / 2, y: self.mainEncodeView.encodeButton.frame.height / 2, width: 0, height: 0)
         }
         
         //Showing the share sheet
@@ -439,7 +450,7 @@ class PictographMainViewController: PictographViewController, UINavigationContro
     }
     
     //Shows the decoded message in an alert controller
-    func showMessageInAlertController(title:String, message: String) {
+    func showMessageInAlertController(title: String, message: String) {
         let showMessageController = PMKAlertController(title: title, message: message, preferredStyle: .Alert)
         showMessageController.addActionWithTitle("Dismiss", style: .Default)
         
@@ -454,7 +465,7 @@ class PictographMainViewController: PictographViewController, UINavigationContro
         
         //Adding the image to the container view
         let imageView = UIImageView(image: UIImage(data: image))
-        imageView.frame = CGRectMake(0, 0, UIScreen.mainScreen().bounds.size.width - 20, UIScreen.mainScreen().bounds.size.width - 20)
+        imageView.frame = CGRect(x: 0, y: 0, width: UIScreen.mainScreen().bounds.size.width - 20, height: UIScreen.mainScreen().bounds.size.width - 20)
         imageView.contentMode = .ScaleAspectFit
         alertView.containerView = imageView
         

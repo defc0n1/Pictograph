@@ -13,7 +13,7 @@ private let cellIdentifier = "PictographSettingsTableViewCellIdentifier"
 
 class SettingsViewController: PictographViewController, UITableViewDataSource, UITableViewDelegate {
     
-    var tableView = UITableView(frame: CGRectZero, style: .Grouped)
+    var tableView = UITableView(frame: CGRect.zero, style: .Grouped)
     
     //MARK: - UIViewController
     
@@ -47,7 +47,7 @@ class SettingsViewController: PictographViewController, UITableViewDataSource, U
                 
                 //Changing the setting for showing the password on screen
                 PictographDataController.sharedController.setUserShowPasswordOnScreen(enabledOrNot)
-                NSNotificationCenter.defaultCenter().postNotificationName(pictographShowPasswordOnScreenSettingChangedNotification, object: nil)
+                NSNotificationCenter.defaultCenter().postNotificationName(Constants.Notifications.showPasswordSettingsChangedNotification, object: nil)
                 print("Show password on screen: \(PictographDataController.sharedController.getUserShowPasswordOnScreen())")
             })
         } else {
@@ -55,7 +55,7 @@ class SettingsViewController: PictographViewController, UITableViewDataSource, U
                 
                 //Changing the setting for showing the password on screen
                 PictographDataController.sharedController.setUserDarkModeEnabled(enabledOrNot)
-                NSNotificationCenter.defaultCenter().postNotificationName(pictographNightModeSettingChangedNotification, object: nil)
+                NSNotificationCenter.defaultCenter().postNotificationName(Constants.Notifications.nightModeSettingsChangedNotification, object: nil)
                 print("Night Mode Enabled: \(PictographDataController.sharedController.getUserNightModeEnabled())")
                 
                 UIView.animateWithDuration(0.5) {

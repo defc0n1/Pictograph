@@ -19,9 +19,9 @@ private let introPage2Color = UIColor(red: 220/255.0, green: 141/255.0, blue: 56
 
 class IntroView {
     class func buildIntroViews() -> [EAIntroPage] {
-        var introViewArray:[EAIntroPage] = []
+        var introViewArray: [EAIntroPage] = []
         
-        if (PictographDataController.sharedController.getUserFirstTimeOpeningApp()) {
+        if PictographDataController.sharedController.getUserFirstTimeOpeningApp() {
             //Introducing the app
             let page1 = EAIntroPage()
             page1.title = "Steganography"
@@ -35,7 +35,7 @@ class IntroView {
             
             //Asking for permission for GPS while using the app
             let page2 = EAIntroPage()
-            page2.title = "Encryption";
+            page2.title = "Encryption"
             page2.titleFont = introViewTitleFont
             page2.titlePositionY = introViewTitleY
             page2.desc = "Pictograph also allows you to encrypt your messages. You will have to give the password to whoever you want to read the message."

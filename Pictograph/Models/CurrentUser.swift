@@ -18,7 +18,7 @@ private let nightModeEnabledKey = "nightModeEnabledKey"
 class CurrentUser: NSObject, NSCoding, NSSecureCoding {
     var firstTimeOpeningApp: Bool = true
     var encryptionEnabled: Bool = false
-    var encryptionPassword : NSString = ""
+    var encryptionPassword: NSString = ""
     var showPasswordOnScreen: Bool = true
     var nightModeEnabled: Bool = false
     

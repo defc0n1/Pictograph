@@ -16,10 +16,9 @@ class PictographHighlightButton: UIButton {
     
     override var highlighted: Bool {
         didSet {
-            if (highlighted) {
+            if self.highlighted {
                 self.backgroundColor = self.backgroundColor?.colorWithAlphaComponent(0.8)
-            }
-            else {
+            } else {
                 self.backgroundColor = self.highlightColor
             }
         }
@@ -37,5 +36,4 @@ class PictographHighlightButton: UIButton {
             }
         }
     }
-    
 }

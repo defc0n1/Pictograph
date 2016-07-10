@@ -40,14 +40,14 @@ class MainEncodingView: UIScrollView {
         let encryptionEnabled = PictographDataController.sharedController.getUserEncryptionEnabled()
         
         self.addSubview(self.elementContainer)
-        self.elementContainer.frame = CGRectMake(0, 0, UIScreen.mainScreen().bounds.width, max(UIScreen.mainScreen().bounds.height-64, 300))
+        self.elementContainer.frame = CGRect(x: 0, y: 0, width: UIScreen.mainScreen().bounds.width, height: max(UIScreen.mainScreen().bounds.height - 64, 300))
         
         //Label for enabling encryption, location for views based off this view
-        encryptionLabel.text = "Use Encryption"
-        encryptionLabel.font = UIFont.boldSystemFontOfSize(mainFontSize)
-        encryptionLabel.textColor = UIColor.whiteColor()
-        encryptionLabel.translatesAutoresizingMaskIntoConstraints = false
-        self.elementContainer.addSubview(encryptionLabel)
+        self.encryptionLabel.text = "Use Encryption"
+        self.encryptionLabel.font = UIFont.boldSystemFontOfSize(mainFontSize)
+        self.encryptionLabel.textColor = UIColor.whiteColor()
+        self.encryptionLabel.translatesAutoresizingMaskIntoConstraints = false
+        self.elementContainer.addSubview(self.encryptionLabel)
         
         //0px from left
         self.elementContainer.addConstraint(NSLayoutConstraint(item:encryptionLabel, attribute: .Left, relatedBy: .Equal, toItem:self.elementContainer, attribute: .Left, multiplier:1, constant:encryptionMargin))
@@ -56,35 +56,35 @@ class MainEncodingView: UIScrollView {
         if screenSize < 1024 {
             //iPhone screen size
             //20px from top of screen
-            self.elementContainer.addConstraint(NSLayoutConstraint(item:encryptionLabel, attribute: .Top, relatedBy: .Equal, toItem: self.elementContainer,  attribute: .Top, multiplier:1, constant:encryptionVerticalMargin))
+            self.elementContainer.addConstraint(NSLayoutConstraint(item: self.encryptionLabel, attribute: .Top, relatedBy: .Equal, toItem: self.elementContainer,  attribute: .Top, multiplier:1, constant:encryptionVerticalMargin))
         } else {
             //All other devices
             //-200px(above) center of view
-            self.elementContainer.addConstraint(NSLayoutConstraint(item:encryptionLabel, attribute: .Top, relatedBy: .Equal, toItem: self.elementContainer,  attribute: .CenterY, multiplier:1, constant:-encryptionVerticalMargin * 10))
+            self.elementContainer.addConstraint(NSLayoutConstraint(item: self.encryptionLabel, attribute: .Top, relatedBy: .Equal, toItem: self.elementContainer,  attribute: .CenterY, multiplier:1, constant:-encryptionVerticalMargin * 10))
         }
         
         
         //Switch for enabling encryption
-        encryptionSwitch.on = encryptionEnabled
-        encryptionSwitch.translatesAutoresizingMaskIntoConstraints = false
-        self.elementContainer.addSubview(encryptionSwitch)
+        self.encryptionSwitch.on = encryptionEnabled
+        self.encryptionSwitch.translatesAutoresizingMaskIntoConstraints = false
+        self.elementContainer.addSubview(self.encryptionSwitch)
         
         //50px from right, center Y = encryptionLabel's center y
-        self.elementContainer.addConstraint(NSLayoutConstraint(item: encryptionSwitch, attribute: .Right, relatedBy: .Equal, toItem: self.elementContainer, attribute: .Right, multiplier: 1, constant: -encryptionMargin))
-        self.elementContainer.addConstraint(NSLayoutConstraint(item: encryptionSwitch, attribute: .CenterY, relatedBy: .Equal, toItem: encryptionLabel, attribute: .CenterY, multiplier: 1, constant: 0))
+        self.elementContainer.addConstraint(NSLayoutConstraint(item: self.encryptionSwitch, attribute: .Right, relatedBy: .Equal, toItem: self.elementContainer, attribute: .Right, multiplier: 1, constant: -encryptionMargin))
+        self.elementContainer.addConstraint(NSLayoutConstraint(item: self.encryptionSwitch, attribute: .CenterY, relatedBy: .Equal, toItem: encryptionLabel, attribute: .CenterY, multiplier: 1, constant: 0))
         
         //Textfield where encryption key is stored
-        encryptionKeyField.alpha = encryptionEnabled ? 1.0 : 0.5
-        encryptionKeyField.enabled = encryptionEnabled
-        encryptionKeyField.secureTextEntry = !PictographDataController.sharedController.getUserShowPasswordOnScreen()
-        encryptionKeyField.backgroundColor = UIColor.whiteColor()
-        encryptionKeyField.font = UIFont.systemFontOfSize(mainFontSize)
-        encryptionKeyField.placeholder = "Encryption Password"
-        encryptionKeyField.text = PictographDataController.sharedController.getUserEncryptionKey()
-        encryptionKeyField.autocapitalizationType = .None
-        encryptionKeyField.autocorrectionType = .No
-        encryptionKeyField.translatesAutoresizingMaskIntoConstraints = false
-        self.elementContainer.addSubview(encryptionKeyField)
+        self.encryptionKeyField.alpha = encryptionEnabled ? 1.0 : 0.5
+        self.encryptionKeyField.enabled = encryptionEnabled
+        self.encryptionKeyField.secureTextEntry = !PictographDataController.sharedController.getUserShowPasswordOnScreen()
+        self.encryptionKeyField.backgroundColor = UIColor.whiteColor()
+        self.encryptionKeyField.font = UIFont.systemFontOfSize(mainFontSize)
+        self.encryptionKeyField.placeholder = "Encryption Password"
+        self.encryptionKeyField.text = PictographDataController.sharedController.getUserEncryptionKey()
+        self.encryptionKeyField.autocapitalizationType = .None
+        self.encryptionKeyField.autocorrectionType = .No
+        self.encryptionKeyField.translatesAutoresizingMaskIntoConstraints = false
+        self.elementContainer.addSubview(self.encryptionKeyField)
         
         //50px from left, right, -80px (above) center y
         self.elementContainer.addConstraint(NSLayoutConstraint(item:encryptionKeyField, attribute: .Top, relatedBy: .Equal, toItem:encryptionLabel, attribute:.Bottom, multiplier:1, constant:encryptionVerticalMargin))
