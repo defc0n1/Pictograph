@@ -548,7 +548,7 @@
         [stringOfBytes appendFormat:@"%c", bytes[i]];
     }
     
-    NSMutableArray *arrayOfBits = [[NSMutableArray alloc] init];
+    NSMutableArray *arrayOfBits = [NSMutableArray arrayWithCapacity:48 + (8 * [resizedImageData length])];
     
     //Adding the information about the image: # of pixels the image takes up, width, height
     [arrayOfBits addObjectsFromArray:[self binaryStringFromInteger:(int)numberOfPixelsNeededToHideImage withSpaceFor:bitCountForInfo]]; //16 bits for spacing
