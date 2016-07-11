@@ -468,9 +468,15 @@
 
 #pragma mark Revealing image hidden within another
 
-/* Returns the PNG representation of the image hidden in the original image */
+/**
+ *  Decodes an image that is hidden within another image
+ *
+ *  @param image image that has a hidden image within it
+ *  @param error error, if there is one
+ *
+ *  @return NSData representation of the image
+ */
 - (NSData *)decodeImageInImage:(UIImage *)image error:(NSError **)error {
-    NSMutableString *decodedString = [[NSMutableString alloc] init];
     NSMutableArray *sizeArrayInBits = [[NSMutableArray alloc] init];
     NSMutableArray *heightArrayInBits = [[NSMutableArray alloc] init];
     NSMutableArray *widthArrayInBits = [[NSMutableArray alloc] init];
@@ -511,7 +517,15 @@
 
 #pragma mark Hiding one image within another
 
-/* Returns the original image with the imageToHide hidden within it */
+/**
+ *  Encodes an image within another image
+ *
+ *  @param imageToHide the image that is going to be scaled down and hidden
+ *  @param image       the image to hide the first image in
+ *  @param error       an error, if there is one
+ *
+ *  @return NSData representation of the image
+ */
 - (NSData *)encodeImage:(UIImage *)imageToHide withinImage:(UIImage *)image error:(NSError **)error {
     
     long numberOfPixelsInOuterImage = image.size.height * image.size.width;
