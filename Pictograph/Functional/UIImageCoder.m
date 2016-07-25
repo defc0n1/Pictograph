@@ -532,8 +532,8 @@
     long numberOfPixelsNeededToHideImage = (imageToHide.size.height * imageToHide.size.width + (3 * 16)) * bytesPerPixel; //3 * 16 to account for size, height, width
     long numberOfBitsNeeded = numberOfPixelsNeededToHideImage * 8;
     float totalScale = (float)numberOfPixelsInOuterImage / numberOfPixelsNeededToHideImage;
-    float scale = roundf(totalScale * 100.0)/100.0; //Rounding to 2 digits
-    CGSize newSize = CGSizeMake(image.size.width / scale, image.size.height / scale);
+    float scale = roundf(totalScale * 100.0)/100.0; //Rounding
+    CGSize newSize = CGSizeMake(image.size.width * scale, image.size.height * scale);
     
     UIImage *resizedImage = [self imageWithImage:imageToHide withScaleFactor:scale];
     
